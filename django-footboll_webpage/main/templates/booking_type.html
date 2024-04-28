@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="delete-div" class="hidden">
+    <div class="bg-black fixed inset-0 opacity-50"></div>
+    <div class="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+        <div class="absolute w-fit h-fit bg-gray-200 rounded-lg shadow-lg p-6 opacity-100">
+            <h1 class="text-3xl font-bold">Delete booking_type</h1>
+            <p class="m-3 text-xl">Are you sure you want to delete booking type:</p>
+            <div class="flex justify-center m-5">
+                <p id="delete-p" class="text-2xl font-semibold">Not defined</p>
+            </div>
+            <div class="flex justify-center">
+                <span id="cancel-delete" class="text-white bg-gray-700 p-2 rounded-md m-1 px-3 font-semibold border-solid border-2 hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700">
+                    Cancel
+                </span>
+                <p id="delete-final" class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:border-red-700 hover:bg-white hover:text-red-700 hover:cursor-pointer">
+                    Delete
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex-1 flex justify-center items-center py-20 bg-gray-300 w-full">
+    <div class="flex bg-gray-300 flex-col items-center">
+        <div class="bg-gray-300 flex sm:flex-wrap xl:flex-nowrap justify-center mx-10 px-10 rounded-xl shadow-lg w-full"> 
+            <div class="bg-white m-5 p-10 rounded-xl shadow-lg shadow-gray-500 h-fit">
+                <h3 class="text-3xl m-1 font-semibold">Add Type of Pass</h3>
+                <form id="form" class="flex justify-start items-start flex-col" method="POST" action="">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    {% if field.label %}
+                    <div class="p-2 rounded-xl hover:bg-gray-300">
+                        <p class="font-semibold">{{ field.label }}:</p>
+                        <p class="border-solid border-2 bg-white border-black rounded">{{ field }}</p>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="flex justify-center w-full">
+                        <input class="bg-gray-200 hover:bg-gray-600 hover:text-white rounded-xl w-fit px-4 py-2 mt-1 font-bold" type="submit" name="Add Booking Type">
+                    </div>
+                </form>
+            </div>
+            <div class="bg-white p-10 m-5 rounded-xl shadow-lg shadow-gray-500 h-fit">
+                <p class="text-3xl font-bold">Types of Booking</p>
+                <div id="booking-type-holder" class="flex flex-wrap items-center justify-center">
+                    {% for booking_type in booking_types %}
+                    <div class="bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500 booking-type-div" 
+                    booking-type-id="{{ booking_type.id }}" booking-type="{{ booking_type.pass_type }}"
+                    id="{{ booking_type.id }}">
+                        <div class="p-2 rounded-xl flex justify-between">
+                            <p class="font-semibold">Type: </p>
+                            <p id="type-{{ booking_type.id }}" class="font-semibold pl-6">{{booking_type.pass_type}}</p>
+                        </div>
+                        <div class="p-2 rounded-xl flex flex-col justify-between">
+                            <p class="font-semibold mr-2">Payment types:</p>
+                            <div class="flex flex-col justify-end">
+                                <ul id="payment-types-{{ booking_type.id }}" class="list-disc list-inside">
+                                {% for booking_type in booking_type.payment_types.all %}
+                                <li class="font-semibold p-1">{{ booking_type }}</li>
+                                {% endfor %}
+                                <ul>
+                            </div>
+                        </div>
+                        <div class="flex justify-center m-2 mt-4 w-full">
+                            <div class="flex flex-col items-center justify-center">
+                                <span id="update-{{ booking_type.id }}" class="text-white p-2 bg-gray-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700">
+                                    Update
+                                </span>
+                            </div>
+                            <div id="delete-{{ booking_type.id }}" class="flex justify-center">
+                                <span class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-red-700 hover:bg-white hover:text-red-700">
+                                    Delete
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="update-form-div-{{ booking_type.id }}" class="hidden bg-white m-10 p-5 rounded-xl shadow-lg shadow-gray-500">
+                        <div class="flex justify-end flex-col items-center h-min">
+                            <div class="flex justify-end items-end w-full">
+                                <div id="close-update-{{ booking_type.id }}" class="bg-gray-400 px-3 h-2 rounded hover:cursor-pointer"></div>
+                            </div>
+                            <form id="update-form-{{ booking_type.id }}" class="m-1 ml-2 rounded-xl flex flex-col justify-center items-center" method="POST" action="" enctype="multipart/form-data" name="update_booking_type">
+                                {% csrf_token %}
+                                <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                                    <p class="group-hover:text-white font-semibold">Type: </p>
+                                    <input class="border-solid border-2 bg-white border-black rounded" type="text" id="type-input-{{ booking_type.id }}" name="type">
+                                </div>
+                                <div class="group flex flex-col justify-start items-start p-2 w-full hover:bg-gray-500 rounded-xl">
+                                    <p class="group-hover:text-white font-semibold">Payment types: </p>
+                                    <div class="border-solid border-2 bg-white border-black rounded focus-within:border-y-0 focus-within:border-gray-500 focus-within:bg-inherit focus-within:pb-1">
+                                        <select id="payment-type-input-{{ booking_type.id }}" multiple name="type" class="form-control">
+                                            {% for choice in choices %}
+                                            <option value="{{ choice.id }}">{{ choice }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>                                        
+                                <input class="bg-gray-200 hover:bg-gray-600 hover:cursor-pointer hover:text-white rounded-xl w-fit px-4 py-2 m-3 font-bold" type="submit" value="Update">
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const deleteParagraph = document.getElementById('delete-p');
+    const deleteDiv = document.getElementById('delete-div');
+    const deleteFinalBtn = document.getElementById('delete-final');
+    const cancelDelete = document.getElementById('cancel-delete');
+    const form = document.getElementById('form');
+    const bookingTypeHolder = document.getElementById('booking-type-holder');
+    const bookingTypesDiv = document.getElementById('booking-types-div');
+
+    form.addEventListener('submit', submitHandler);
+
+    function submitHandler(event) {
+        event.preventDefault();
+        $.ajax({
+            type:'POST',
+            url: "{% url 'booking_type' %}",
+            data: $("#form").serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 1) {
+                    bookingTypeHolder.innerHTML += response.html;
+                    buttonsSet();
+                }
+                else {
+                    alert(response.msg)
+                }
+            }
+        })};
+        
+    cancelDelete.addEventListener('click', function() { toggleHidden(deleteDiv); });
+    deleteFinalBtn.addEventListener('click', function() {
+        $.ajax({
+            type: 'GET',
+            url: this.getAttribute('link'),
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 1) {
+                    const deleting = document.getElementById(response.id);
+                    deleting.remove();
+                    toggleHidden(deleteDiv);
+                }
+                else {
+                    toggleHidden(deleteDiv);
+                    alert(response.msg);
+                }
+            }
+            })
+    });
+
+    buttonsSet()
+
+    function toggleHidden(element) {
+        element.classList.toggle('hidden')
+    };
+    function addText(text, id) {
+        deleteParagraph.textContent = text;
+    };
+
+    function selectOptions(options, listItems) {
+        if (options) {
+            for (let i = 0; i < options.length; i++) {
+              if (listItems.includes(options[i].textContent)) {
+                options[i].selected = true
+              }
+              else {
+                options[i].selected = false
+              }
+            }
+            }
+    };
+
+    function getPaymentTypes(element) {
+        let options = element.options;
+        let selectedPaymentTypes = [];
+        if (options) {
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].selected) {
+            selectedPaymentTypes.push(options[i].value);
+          }
+        }
+        }
+        return selectedPaymentTypes;
+      };
+
+    function buttonsSet() {
+        const deleteDivs = document.querySelectorAll('.booking-type-div');
+        deleteDivs.forEach((div) => {
+            const bookingTypeId = div.getAttribute('id');
+            let bookingTypeType = div.getAttribute('booking-type');
+            const deleteBtn = document.querySelector(`#delete-${bookingTypeId}`);
+            const updateBtn = document.querySelector(`#update-${bookingTypeId}`);
+            const updateForm = document.querySelector(`#update-form-div-${bookingTypeId}`);
+            let inputType = document.querySelector(`#type-input-${bookingTypeId}`);
+            let inputPaymentType = document.querySelector(`#payment-type-input-${bookingTypeId}`);
+            const closeUpdate = document.querySelector(`#close-update-${bookingTypeId}`);
+            const form2 = document.querySelector(`#update-form-${bookingTypeId}`);
+            const listPayment = document.querySelector(`#payment-types-${bookingTypeId}`);
+
+            form2.addEventListener('submit', function(event) {
+            event.preventDefault();
+            let optionSelected = getPaymentTypes(inputPaymentType);
+            $.ajax({
+                type: 'POST',
+                url:`/update_booking_type/${bookingTypeId}/`,
+                data: {
+                    type:inputType.value,
+                    paytype:optionSelected,
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                dataType: 'json',
+                success: function (response) {
+                if (response.status === 1) {
+                    bookingTypeType = response.type
+                    document.getElementById(`type-${bookingTypeId}`).textContent = response.type
+                    listPayment.innerHTML = response.innerhtml;
+                    toggleHidden(updateForm);
+                    toggleHidden(div);
+                }
+                else {
+                    alert(response.msg)
+                }
+                }})})
+
+            closeUpdate.addEventListener('click', function() {
+                toggleHidden(updateForm);
+                toggleHidden(div);
+            });
+
+            updateBtn.addEventListener('click', function() {
+                document.getElementById(`type-input-${bookingTypeId}`).placeholder = bookingTypeType
+                document.getElementById(`type-input-${bookingTypeId}`).value = bookingTypeType
+                let options = inputPaymentType.options;
+                let listItems = [...listPayment.querySelectorAll('li')].map(item => item.textContent);
+                selectOptions(options, listItems);
+                toggleHidden(updateForm);
+                toggleHidden(div);
+            });
+
+            deleteBtn.addEventListener('click', function() {
+                addText(bookingTypeType, bookingTypeId);
+                toggleHidden(deleteDiv);
+                deleteFinalBtn.setAttribute('link',`/delete_booking_type/${bookingTypeId}/`)
+            });
+        })};
+</script>
+{% endblock %}

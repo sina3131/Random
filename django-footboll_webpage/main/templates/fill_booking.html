@@ -1,0 +1,55 @@
+<div class="bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500 booking-type-div" 
+booking-type-id="{{ booking_type.id }}" booking-type="{{ booking_type.pass_type }}"
+id="{{ booking_type.id }}">
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Type: </p>
+        <p id="type-{{ booking_type.id }}" class="font-semibold pl-6">{{booking_type.pass_type}}</p>
+    </div>
+    <div class="p-2 rounded-xl flex flex-col justify-between">
+        <p class="font-semibold mr-2">Payment types:</p>
+        <div class="flex flex-col justify-end">
+            <ul id="payment-types-{{ booking_type.id }}" class="list-disc list-inside">
+            {% for booking_type in booking_type.payment_types.all %}
+            <li class="font-semibold p-1"> {{ booking_type }}</li>
+            {% endfor %}
+            <ul>
+        </div>
+    </div>
+    <div class="flex justify-center m-2 mt-4 w-full">
+        <div class="flex flex-col items-center justify-center">
+            <span id="update-{{ booking_type.id }}" class="text-white p-2 bg-gray-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700">
+                Update
+            </span>
+        </div>
+        <div id="delete-{{ booking_type.id }}" class="flex justify-center">
+            <span class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-red-700 hover:bg-white hover:text-red-700">
+                Delete
+            </span>
+        </div>
+    </div>
+</div>
+<div id="update-form-div-{{ booking_type.id }}" class="hidden bg-white m-10 p-5 rounded-xl shadow-lg shadow-gray-500">
+    <div class="flex justify-end flex-col items-center h-min">
+        <div class="flex justify-end items-end w-full">
+            <div id="close-update-{{ booking_type.id }}" class="bg-gray-400 px-3 h-2 rounded hover:cursor-pointer"></div>
+        </div>
+        <form id="update-form-{{ booking_type.id }}" class="m-1 ml-2 rounded-xl flex flex-col justify-center items-center" method="POST" action="" enctype="multipart/form-data" name="update_booking_type">
+            {% csrf_token %}
+            <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Type: </p>
+                <input class="border-solid border-2 bg-white border-black rounded" type="text" id="type-input-{{ booking_type.id }}" name="type">
+            </div>
+            <div class="group flex flex-col justify-start items-start p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Payment types: </p>
+                <div class="border-solid border-2 bg-white border-black rounded focus-within:border-y-0 focus-within:border-gray-500 focus-within:bg-inherit focus-within:pb-1">
+                    <select id="payment-type-input-{{ booking_type.id }}" multiple name="type" class="form-control">
+                        {% for choice in choices %}
+                        <option value="{{ choice.id }}">{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>                                        
+            <input class="bg-gray-200 hover:bg-gray-600 hover:cursor-pointer hover:text-white rounded-xl w-fit px-4 py-2 m-3 font-bold" type="submit" value="Update">
+        </form>
+    </div>
+</div>

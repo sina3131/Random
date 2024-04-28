@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Session Details</h1>
+<p>Date: {{ session.date }}</p>
+<p>Start Time: {{ session.start_time }}</p>
+<p>End Time: {{ session.end_time }}</p>
+<a href="{% url 'book' %}?date={{ session.date }}&start_time={{

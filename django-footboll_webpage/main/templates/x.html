@@ -1,0 +1,96 @@
+<h1>My Players</h1>
+<ul id="player-list">
+{% for player in players %}
+    <li>{{ player.first_name }} <button class="delete-btn" data-pk="{{ player.pk }}">Delete</button></li>
+{% empty %}
+    <li>No players added yet.</li>
+{% endfor %}
+</ul>
+
+<button id="add-btn">Add Player</button>
+
+<div id="add-player-form" style="display: none;">
+    <h2>Add Player</h2>
+    <form id="player-form">
+        {% csrf_token %}
+        <input type="text" id="first-name-input" placeholder="First Name">
+        <button type="submit">Add Player</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listener to add button
+    document.querySelector('#add-btn').addEventListener('click', function() {
+        // Show add player form
+        document.querySelector('#add-player-form').style.display = 'block';
+    });
+
+    // Add event listener to player form
+    document.querySelector('#player-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Get input value
+        const firstNameInput = document.querySelector('#first-name-input');
+        const firstName = firstNameInput.value.trim();
+        // Clear input
+        firstNameInput.value = '';
+
+        // Send AJAX request to add player
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const data = new FormData();
+        data.append('first_name', firstName);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '{% url "add_player" %}');
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Create new player element and add to list
+                const pk = JSON.parse(xhr.responseText).pk;
+                const playerList = document.querySelector('#player-list');
+                const player = document.createElement('li');
+                player.textContent = firstName;
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.dataset.pk = pk;
+                deleteBtn.textContent = 'Delete';
+                player.appendChild(deleteBtn);
+                playerList.appendChild(player);
+                // Hide add player form
+                document.querySelector('#add-player-form').style.display = 'none';
+            } else {
+                console.error(xhr.statusText);
+            }
+        };
+        xhr.onerror = function() {
+            console.error(xhr.statusText);
+        };
+        xhr.send(data);
+    });
+
+    // Add event listener to delete buttons
+    document.querySelectorAll('.delete-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const pk = this.dataset.pk;
+            // Send AJAX request to delete player
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "delete_player" %}');
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Remove player element from list
+                    const player = document.querySelector(`#player-list li button[data-pk="${pk}"]`).parentNode;
+                    player.remove();
+                } else {
+                    console.error(xhr.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                console.error(xhr.statusText);
+            };
+            xhr.send(JSON.stringify({'pk': pk}));
+        });
+    });
+});
+</script>
+``

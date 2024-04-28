@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="calendar"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'timeGridDay',
+      events: {{ events|safe }},
+      eventClick: function(info) {
+        window.location.href = '/session/' + info.event.start;
+      }
+    });
+    calendar.render();
+  });
+</script>
+{% endblock %}

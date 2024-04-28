@@ -1,0 +1,130 @@
+
+
+{% extends 'base.html' %}
+{% block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+        }
+        #chatbox {
+            background-color: #34064d;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 50px auto;
+            max-width: 600px;
+            padding: 20px;
+            width: 100%;
+            margin-top: 100px;
+        }
+        .chatlog {
+            height: 300px;
+            overflow-y: scroll;
+        }
+        .chat-form {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .chat-form input[type="text"] {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            padding: 10px;
+            width: 80%;
+            margin-left: 80px;
+        }
+        .chat-form button[type="submit"] {
+            background-color: #22cba4;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 10px;
+            width: 50%;
+            margin-left: 150px;
+        }
+        .user-msg {
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            width: 60%;
+            margin-left: 110px;
+            
+        }
+        .bot-msg {
+            background-color: #10bea1;
+            border-radius: 5px;
+            color: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            text-align: right;
+            width: 60%;
+            margin-left: 110px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <div class="chatlog"></div>
+        <div class="chat-form">
+            <form onsubmit="return submitChat(event)">
+                <input type="text" placeholder="Type your message here..." id="chat-input">
+                <button  type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#chat-input").focus();
+        });
+
+        function submitChat(event) {
+            event.preventDefault();
+            var message = $("#chat-input").val();
+            $("#chat-input").val("");
+            $(".chatlog").append("<div class='user-msg'>" + message + "</div>");
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'chatbot' %}",
+                data: {
+                    'message': message,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    $(".chatlog").append("<div class='bot-msg'>" + response.response + "</div>");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

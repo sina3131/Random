@@ -1,0 +1,77 @@
+<div class="bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500 payment-type-div" 
+id="{{ payment_type.id }}" payment-type-id="{{ payment_type.id }}" payment-type-name="{{ payment_type.name }}"
+payment-type-price="{{ payment_type.price }}" payment-type-short="{{ payment_type.short_description }}"
+payment-type-long="{{ payment_type.description }}" payment-type-type="{{ payment_type.type }}">
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Name: </p>
+        <p id="name-{{ coach.id }}" class="font-semibold pl-6">{{ payment_type.name }}</p>
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Price:  </p>
+        <div class="flex justify-center">
+            <p id="price-{{ coach.id }}" class="font-semibold pl-6">{{ payment_type.price }}</p>
+            <span class="font-semibold pl-1">kr</span>
+        </div>
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Short description:  </p>
+        <p id="short-{{ coach.id }}" class="font-semibold pl-6">{{ payment_type.short_description }}</p>
+    </div>
+    <div class="p-2 rounded-xl flex flex-col justify-between">
+        <p class="font-semibold mr-auto">Long description:  </p>
+        <pre id="long-{{ coach.id }}" class="font-sans font-semibold pl-6 text-right">{{ payment_type.description }}</pre>
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Type:  </p>
+        <p id="type-{{ coach.id }}" class="font-sans font-semibold ml-auto pl-6 text-right">{{ payment_type.type }}</p>
+    </div>
+    <div class="flex justify-center w-full">
+        <div class="flex m-2 mt-4">
+            <div class="flex justify-center">
+                <span id="update-{{ payment_type.id }}" class="text-white p-2 bg-gray-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700">
+                    Update Payment Type
+                </span>
+            </div>
+            <div id="delete-{{ payment_type.id }}" class="flex justify-center">
+                <span class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-red-700 hover:bg-white hover:text-red-700">
+                    Delete Payment Type
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="update-form-{{ payment_type.id }}" class="hidden bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500">
+    <div class="flex justify-end flex-col items-center h-min">
+        <div class="flex justify-end items-end w-full">
+            <div id="close-update-{{ payment_type.id }}" class="bg-gray-400 px-3 h-2 rounded hover:cursor-pointer"></div>
+        </div>
+        <form id="update-form-{{ payment_type.id }}" class="m-1 ml-2 rounded-xl flex flex-col justify-center items-center" method="POST" action="" enctype="multipart/form-data" name="update_payment_type">
+            {% csrf_token %}
+            <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Name: </p>
+                <input type="text" id="name-input-{{ payment_type.id }}" name="name">
+            </div>
+            <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Price:  </p>
+                <input type="number" id="price-input-{{ payment_type.id }}" name="price">
+            </div>
+            <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Short description:  </p>
+                <input type="text" id="short-input-{{ payment_type.id }}" name="short">
+            </div>
+            <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Long description: </p>
+                <textarea id="long-input-{{ payment_type.id }}" name="long"></textarea>
+            </div>
+            <div class="group flex justify-between items-center p-2 w-full hover:bg-gray-500 rounded-xl">
+                <p class="group-hover:text-white font-semibold">Type: </p>
+                <select id="type-input-{{ payment_type.id }}" name="type" class="form-control">
+                    <option value="O">Once</option>
+                    <option value="M">Membership</option>
+                    <option value="P">Package</option>
+                </select>
+            </div>                                        
+            <input class="bg-gray-200 mx-16 hover:bg-gray-600 hover:cursor-pointer hover:text-white rounded-xl w-fit px-4 py-2 font-bold" type="submit" value="Uppdate Payment Type">
+        </form>
+    </div>
+</div>

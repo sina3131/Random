@@ -1,0 +1,91 @@
+<div class="bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500 player-div" 
+data-player-id="{{ player.id }}" player-name="{{ player.first_name }} {{ player.last_name }}" player-email="{{ player.email }}"
+    player-number="{{ player.phone_number }}" player-year="{{ player.year_of_birth }}" id="{{ player.id }}">
+    <div class="w-40 h-40 mr-auto ml-auto mb-6 aspect-w-1 border-solid border-4 border-gray-400 rounded-full aspect-h-1 overflow-hidden">
+        <img id="img-{{ player.id }}" class="object-cover w-full h-full" src="/media/{{ player.img_player }}" alt="Image" enctype="multipart/form-data">
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">First name: </p>
+        <p class="font-semibold pl-6">{{player.first_name}}</p>
+
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Last name:  </p>
+        <p class="font-semibold pl-6">{{player.last_name}}</p>
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Email:  </p>
+        <p id="email-{{ player.id }}" class="font-semibold pl-6">{{ player.email }}</p>
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        {% if player.phone_number %}
+        <p class="font-semibold">Phone number: </p>
+        <p id="number-{{ player.id }}" class="font-semibold pl-6">{{ player.phone_number }}</p>
+        {% else %}
+        <p id="number-{{ player.id }}" class="font-semibold">Phone number: </p>
+        {% endif %}
+    </div>
+    <div class="p-2 rounded-xl flex justify-between">
+        <p class="font-semibold">Birth Year:  </p>
+        <pre id="year-{{ player.id }}" class="font-sans font-semibold pl-6 text-right">{{ player.year_of_birth }}</pre>
+    </div>
+    <div class="flex xlex-col m-2 mt-4">
+        <div class="flex justify-center">
+            <span id="update-btn-{{ player.id }}" class="text-white p-2 bg-gray-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700">
+                Update Player
+            </span>
+        </div>
+        <div id="delete-btn-{{ player.id }}" class="flex justify-center">
+            <span class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-red-700 hover:bg-white hover:text-red-700">
+                Delete Player
+            </span>
+        </div>
+    </div>
+</div>
+<div id="player-form-{{ player.id }}" class="bg-white p-3 pr-2 py-2 m-10 hidden rounded-xl shadow-lg shadow-gray-500">
+    <div class="flex justify-end items-center h-min">
+        <div id="close-update-{{ player.id }}" class="bg-gray-400 px-2 h-2 rounded hover:cursor-pointer"></div>
+    </div>
+    <div class="w-40 h-40 mr-auto ml-auto aspect-w-1 border-solid border-4 border-gray-400 rounded-full aspect-h-1 overflow-hidden">
+        <img id="update-img-{{ player.id }}" class="object-cover w-full h-full" src="/media/{{ player.img_player }}" alt="Image" enctype="multipart/form-data">
+    </div>
+    <div class="p-2 ml-2 rounded-xl flex justify-start hover:bg-gray-300">
+        <p class="font-semibold">First name: </p>
+        <p class="font-semibold pl-6">{{player.first_name}}</p>
+    </div>
+    <div class="p-2 ml-2 rounded-xl flex justify-start hover:bg-gray-300">
+        <p class="font-semibold">Last name:  </p>
+        <p class="font-semibold pl-6">{{player.last_name}}</p>
+    </div>
+    <form id="update-form-{{ player.id }}" class="flex justify-start flex-col h-fit p-2" method="POST" action="/update_player/{{ player.id }}/" enctype="multipart/form-data" name="player_update_form">
+        {% csrf_token %}
+        <div class="p-2 ml-2 rounded-xl flex justify-start hover:bg-gray-300">
+            <p class="font-semibold mr-2">{{ update_player_form.email.label }}:</p>
+            <div id="input-email-{{ player.id }}" class="border-solid border-2 bg-white border-black rounded">
+                {{ update_player_form.email }}
+            </div>
+        </div>
+        <div class="p-2 ml-2 rounded-xl flex justify-start hover:bg-gray-300">
+            <p class="font-semibold mr-2">{{ update_player_form.phone_number.label }}:</p>
+            <div id="input-number-{{ player.id }}" class="border-solid border-2 bg-white border-black rounded">
+                {{  update_player_form.phone_number }}
+            </div>
+        </div>
+        <div class="p-2 ml-2 rounded-xl flex justify-start hover:bg-gray-300">
+            <p class="font-semibold mr-2">{{  update_player_form.year_of_birth.label }}:</p>
+            <div id="input-year-{{ player.id }}" class="border-solid border-2 bg-white border-black rounded">
+                {{ update_player_form.year_of_birth }}
+            </div>
+        </div>
+        <div class="p-2 ml-2 rounded-xl flex flex-col justify-start hover:bg-gray-300">
+            <p class="font-semibold mr-2">{{ update_player_form.img_player.label }}:</p>
+            <div id="input-img-update-{{ player.id }}" class="border-solid border-2 bg-white border-black rounded">
+                {{ update_player_form.img_player }}
+            </div>
+        </div>
+        <div class="flex justify-center">
+            <input class="text-white p-2 bg-gray-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700"
+            type="submit" value="Update Player">
+        </div>
+    </form>
+</div>

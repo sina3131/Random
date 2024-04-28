@@ -1,0 +1,54 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sina</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block content %}
+    <div class="relative h-[75vh] w-full">
+        <video class="absolute top-0 left-0 w-full h-full object-cover z-0" autoplay muted loop src="https://www.mvpakademi.se/wp-content/uploads/2022/10/MVP-Hemsida-Horison.mov#t=0,70"></video>
+        <div class="bg-black opacity-50 h-full w-full top-0 absolute"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-white text-center">
+          <h1 class="text-4xl font-bold">MVP Akademi</h1>
+          <h3 class="text-4xl font-bold">Pt traning</h3>
+          <p>Första steg till en proffskarriär</p>
+        </div>
+      </div>
+      <div class="bg-cover bg-center h-screen" style="background-image: url('/media/camp/portfoillio3.jpg');">
+        <div class="flex flex-col justify-center items-center h-full">
+          {% for t in traning_pt %}
+          <div class="w-full flex justify-center items-center mb-16">
+            <div class="w-2/5 px-8">
+              <h1 class="text-purple-700 font-bold text-4xl mb-8">{{ t.name }}</h1>
+              <p class="text-red-50 text-lg mb-4">{{ t.description }}</p>
+              <h3 class="text-lime-600 text-lg mb-4">{{ t.price }}</h3>
+              <a href="{% url 'prov_traning_register' %}">  
+                <h5 class="text-blue-400 text-lg">Book here</h5>
+              </a>
+            </div>
+          </div>
+        
+          {% endfor %}
+        </div>
+      </div>
+      <div class="flex flex-wrap justify-center">
+        <div class="mx-4"><iframe class="w-fit" width="480" height="315" src="https://www.youtube.com/embed/klRnKAsJl34" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+        <div class="mx-4"><iframe class="w-fit" width="480" height="315" src="https://www.youtube.com/embed/-mD1JW4GGvo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>  
+        <div class="mx-4"><iframe class="w-fit" width="480" height="315" src="https://www.youtube.com/embed/SB1-PWccb9w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+      </div>
+      <div class="p-5 text-center neutral-900 text-neutral-700 dark:text-neutral-200"> 2023 Copyright ©
+        <a class="text-neutral-800 dark:text-neutral-400"href="https://www.mvpakademi.se">MVP Akademi</a>
+      </div>
+    {% endblock %}
+    
+</body>
+</html>

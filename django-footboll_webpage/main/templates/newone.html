@@ -1,0 +1,356 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Booking</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- FullCalendar JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+</head>
+<body class="pt-10 bg-neutral-900">
+    <div id="info-div" class="hidden z-40 relative">
+        <div class="bg-black fixed inset-0 opacity-50"></div>
+        <div class="fixed w-full h-full flex items-center justify-center">
+            <div id="scroll" class="absolute w-fit h-2/3 bg-gray-200 rounded-lg shadow-lg p-6 opacity-100 overflow-y-scroll border-y-8">
+                <style>#scroll::-webkit-scrollbar { width: 8px; }</style>
+                <div class="flex justify-center">
+                    <h1 id="title" class="text-3xl font-bold">Here is the booking</h1>
+                </div>
+                <div>
+                    <span class="m-3 ml-0 text-xl">Descrition:</span>
+                    <p id="description" class="ml-2"></p>
+                </div>
+                <div class="flex justify-between items-baseline">
+                    <div class="flex flex-col m-1 justify-between items-baseline">
+                        <div>
+                            <span class="m-3 ml-0 text-xl">Coaches:</span>
+                            <p id="coaches" class="ml-2"></p>
+                        </div>
+                        <div>
+                            <span>Spots left:</span><span class="ml-2" id="spot-left"></span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-end items-end ml-10">
+                        <span id="location" class="font-semibold"></span>
+                        <span id="date" class="font-semibold">date</span>
+                        <div class="flex">
+                            <span>&#40;</span>
+                            <span id="from"></span><span class="mx-1"> - </span><span id="to"></span>
+                            <span>&#41;</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="m-2 text-xl">Adress:</p>
+                    <div class="ml-4">
+                        <a id="adress" href="" target="_blank"></a>
+                        <div id="iframe"></div>
+                    </div>
+                </div>
+                <form id="book-form" class="m-1 ml-2 rounded-xl flex flex-col justify-center items-center" method="POST" action="" enctype="multipart/form-data" name="update_booking_type">
+                    {% csrf_token %}
+                    <div id="select-players" class="flex flex-col justify-center mt-4"></div>
+                    <div class="flex justify-center mt-4">
+                        <input id="book" class="text-white p-2 bg-gray-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:border-gray-700 hover:bg-white hover:text-gray-700 hover:cursor-pointer" type="submit" value="Book">
+                        <p id="cancel" class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:border-red-700 hover:bg-white hover:text-red-700 hover:cursor-pointer">
+                            Close
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="payment-div" class="hidden z-50 relative">
+        <div class="bg-black fixed inset-0 opacity-50"></div>
+        <div class="fixed w-full h-full flex items-center justify-center">
+            <div id="scroll2" class="absolute w-fit h-fit bg-gray-200 rounded-lg shadow-lg p-6 pt-1 opacity-100 overflow-y-scroll border-y-8">
+                <style>#scroll2::-webkit-scrollbar { width: 8px; }</style>
+                <div class="w-full flex justify-end">
+                    <p id="close" class="font-extrabold text-red-800 text-2xl hover:cursor-pointer">X</p>
+                </div>
+                <div class="flex justify-center">
+                    <h1 id="title2" class="text-3xl font-bold"></h1>
+                </div>
+                <div id="payments" class="flex flex-col w-fit">
+                    <div class='flex justify-center'>
+                        <span id="payment-type0" link="" class='hidden border-2 m-1 p-2 border-gray-700 rounded-xl hover:cursor-pointer'></span>
+                    </div>
+                    <div class='flex justify-center'>
+                        <span id="payment-type1" link="" class='hidden border-2 m-1 p-2 border-gray-700 rounded-xl hover:cursor-pointer'></span>
+                    </div>
+                    <div class='flex justify-center'>
+                        <span id="payment-type2" link="" class='hidden border-2 m-1 p-2 border-gray-700 rounded-xl hover:cursor-pointer'></span>
+                    </div>
+                    <div class='flex justify-center'>
+                        <span id="payment-type3" link="" class='hidden border-2 m-1 p-2 border-gray-700 rounded-xl hover:cursor-pointer'></span>
+                    </div>
+                </div>
+                <div id="more"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="py-20">
+    <h1 class="text-3xl font-bold mb-8 text-white"> Book your pass here</h1>
+    <div class="container mx-auto p-4 h-fit rounded-xl bg-white">
+        <div  id="calendar" class="text-white bg-neutral-800 p-8 rounded"></div>
+        <div id="classes"></div>
+    </div>
+</div>
+<script>
+    const cancel = document.getElementById('cancel')
+    const book = document.getElementById('book')
+    const infoDiv = document.getElementById('info-div')
+    const title2 = document.getElementById('title2')
+    const paymentDiv = document.getElementById('payment-div')
+    const more = document.getElementById('more')
+    const close = document.getElementById('close')
+
+    const payTypeDiv0 = document.getElementById('payment-type0')
+    const payTypeDiv1 = document.getElementById('payment-type1')
+    const payTypeDiv2 = document.getElementById('payment-type2')
+    const payTypeDiv3 = document.getElementById('payment-type3')
+    const payments = document.getElementById('payments')
+
+
+    payTypeDiv0.addEventListener('click', function(event) {
+        let link = this.getAttribute('link');
+        $.ajax({
+            type:'GET',
+            url: link,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 1) {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+                else {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+            }
+        })
+    }),
+    payTypeDiv1.addEventListener('click', function(event) {
+        let link = this.getAttribute('link');
+        $.ajax({
+            type:'GET',
+            url: link,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 1) {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+                else {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+            }
+        })
+    }),
+    payTypeDiv2.addEventListener('click', function(event) {
+        let link = this.getAttribute('link');
+        $.ajax({
+            type:'GET',
+            url: link,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 1) {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+                else {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+            }
+        })
+    }),
+    payTypeDiv3.addEventListener('click', function(event) {
+       let link = this.getAttribute('link');
+       $.ajax({
+           type:'GET',
+           url: link,
+           dataType: 'json',
+           success: function(response) {
+                if (response.status === 1) {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+                else {
+                    title2.textContent = response.title2
+                    more.textContent = response.msg
+                    payments.classList.add('hidden')
+                }
+           }
+       })
+   }),
+    
+    close.addEventListener('click', function() { paymentDiv.classList.toggle('hidden') });
+    
+    
+    const playersSelectDiv = document.getElementById('select-players')
+    
+    cancel.addEventListener('click', function() { infoDiv.classList.toggle('hidden'), console.log("div", infoDiv)});
+    
+    book.addEventListener('click', function(event) {
+        event.preventDefault();
+        let id = book.getAttribute("booking");
+        let form = $('#book-form')[0];
+        let formData = new FormData(form);
+        console.log("RRR")
+        $.ajax({
+            type:'POST',
+            url: `/get_booking_payments/${id}/`,
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 1) {
+                    title2.textContent = response.title2
+                    paymentDiv.classList.toggle('hidden')
+                    payments.classList.add('hidden')
+                }
+                else if (response.status === 2) {
+                    title2.textContent = response.title2
+                    let pay_types = JSON.parse(response.pay_types)
+                    for (let i = 0; i < pay_types.length; i++) {
+                        console.log(pay_types[i]);
+                        let payType = document.getElementById(`payment-type${i}`)
+                        payType.innerHTML = pay_types[i][0]
+                        payType.setAttribute('link', pay_types[i][1])
+                        payType.classList.remove('hidden')
+                    }
+                    more.innerHTML = response.html2
+                    console.log("REMOVE");
+                    paymentDiv.classList.remove('hidden')
+                    payments.classList.remove('hidden')
+                }
+                
+                else {
+                    title2.textContent = response.title2
+                    paymentDiv.classList.toggle('hidden')
+                    payments.classList.add('hidden')
+                }
+            }
+        })
+    },
+    
+    $(document).ready(function() {
+        // Initialize the calendar
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            // Add events to the calendar
+            events: [],
+            
+            eventClick: function(event) {
+                // Open the event URL in a new window
+                let id = event.id
+                let location = document.getElementById('location')
+                let title = document.getElementById('title')
+                let date = document.getElementById('date')
+                let coaches = document.getElementById('coaches')
+                let description = document.getElementById('description')
+                let from = document.getElementById('from')
+                let to = document.getElementById('to')
+                let spotLeft = document.getElementById('spot-left')
+                let adress = document.getElementById('adress')
+                let iframe = document.getElementById('iframe')
+                
+                
+                $.ajax({
+                    type:'GET',
+                    url: `/get_booking_info/${id}/`,
+                    data: "",
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 1) {
+                            title.innerHTML = event.title
+                            date.innerHTML = response.date
+                            coaches.innerHTML = response.coaches
+                            from.innerHTML = response.from
+                            description.innerHTML = response.description
+                            to.innerHTML = response.to
+                            spotLeft.innerHTML = response.spot_left
+                            location.innerHTML = response.location
+                            adress.innerHTML = response.adress
+                            adress.setAttribute('href', response.adress_url)
+                            iframe.innerHTML = response.map_html
+                            book.setAttribute("booking", id)
+                            playersSelectDiv.innerHTML = response.players_html
+                        }
+                        
+                        else {
+                            alert(response.msg)
+                        }
+                    }
+                })
+                infoDiv.classList.toggle('hidden') },
+            // Add a click event to the calendar
+            dayClick: function(date, jsEvent, view) {
+                // Clear the classes div
+                $('#classes').html('');
+                // Get the date as a string
+                var dateString = moment(date).format('YYYY-MM-DD');
+                // Loop through the events and display the ones for the selected date
+                $.each($('#calendar').fullCalendar('clientEvents'), function(index, event) {
+                    if (event.start.format('YYYY-MM-DD') == dateString) {
+                        $('#classes').append('<p>' + event.title + ' (' + event.start.format('h:mm A') + ' - ' + event.end.format('h:mm A') + ')</p>');
+                    }
+                });
+                
+            }
+        });
+    }));
+    $.ajax({
+        url: '/get_bookings/',
+        type: 'GET',
+        dataType: 'json',
+        data: {},
+        success: function(response) {
+            // Create a new FullCalendar event object using the response data
+            for (var i = 0; i < response.events.length; i++) {
+                var newEvent = {
+                    title: response.events[i].title,
+                    start: response.events[i].start,
+                    end: response.events[i].end,
+                    editable: response.events[i].editable,
+                    id: response.events[i].id,
+                    color: response.events[i].color, // The color of the event
+                    backgroundColor: response.events[i].color, // The background color of the event
+                    textColor: '#fff', // The text color of the event
+                    borderColor: '#808080', // The border color of the event
+                    className: `event-class-${response.events[i].id} hover:cursor-pointer`, // A CSS class to add to the event element
+                };
+                
+                // Add the new event to the calendar
+                $('#calendar').fullCalendar('renderEvent', newEvent, true)
+            } 
+        }
+    })
+</script>
+</body>
+</html>
+{% endblock %}

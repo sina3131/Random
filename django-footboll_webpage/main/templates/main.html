@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static%}
+ {% block content %}
+ <div class="w-fit ml-auto mr-auto">
+   <!-- when video takes the full screen 
+    <div class="relative h-screen w-full">
+      <div class="relative z-0 h-screen">
+        <video class="absolute top-0 left-0 min-w-full min-h-full z-0 object-cover" autoplay="" muted="" playsinline="" loop="" src="https://www.mvpakademi.se/wp-content/uploads/2022/10/MVP-Hemsida-Horison.mov#t=0,70" style="width: 1207px; height: 678.938px;"></video>
+      </div> 
+      <div class="bg-black opacity-50 h-full w-full top-0 absolute"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-white text-center">
+        <h1 class="text-4xl font-bold">MVP Akademi</h1>
+        <p>Första steg till en proffskarriär</p>
+        <button class="bg-white text-black py-2 px-4 mt-4 rounded-md hover:bg-gray-300">Boka pass</button>
+      </div>
+    </div>
+  </div>-->
+  <!-- when video takes h-[x] x% of the screen -->
+  <div class="relative h-[75vh] w-full">
+    <video class="absolute top-0 left-0 w-full h-full object-cover z-0" autoplay muted loop src="https://www.mvpakademi.se/wp-content/uploads/2022/10/MVP-Hemsida-Horison.mov#t=0,70"></video>
+    <div class="bg-black opacity-50 h-full w-full top-0 absolute"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-white text-center">
+      <h1 class="text-4xl font-bold">MVP Akademi</h1>
+      <p>Första steg till en proffskarriär</p>
+      <a href="/calender/"><button class="bg-white text-black py-2 px-4 mt-4 rounded-md hover:bg-gray-300">Boka pass</button></a>
+    </div>
+  </div>
+  <main class="p-20 z-30 bg-neutral-900">
+    <div class="columns-auto pb-10">
+      <img class="w-full aspect-video object-cover" src="https://scontent-arn2-1.xx.fbcdn.net/v/t1.6435-9/126185563_1332042683632838_3255534420505610890_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a26aad&_nc_ohc=3Ur-W413mpIAX_qBrpy&_nc_ht=scontent-arn2-1.xx&oh=00_AfA6Y1Yugy13GOLEPMVjo5bC9m96yzX5XFdQxW6HFGgCsw&oe=645553A9">
+    </div>
+    <div class="flex flex-wrap justify-center">
+      <div class="mx-4"><iframe class="w-fit" width="480" height="315" src="https://www.youtube.com/embed/klRnKAsJl34" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+      <div class="mx-4"><iframe class="w-fit" width="480" height="315" src="https://www.youtube.com/embed/-mD1JW4GGvo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>  
+      <div class="mx-4"><iframe class="w-fit" width="480" height="315" src="https://www.youtube.com/embed/SB1-PWccb9w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+    </div>
+
+    </div>
+    
+    <!-- <a id="chat-icon" href="chat"><img src="https://chatlayer.ai/wp-content/uploads/2022/06/chatbots-vs-conversational-AI-01-01.png" alt="Chat"></a> -->
+
+
+    
+    <!-- <div id="chatbot-container">
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        $(document).ready(function() {
+            $("#chat-input").focus();
+        });
+
+        function submitChat(event) {
+            event.preventDefault();
+            var message = $("#chat-input").val();
+            $("#chat-input").val("");
+            $(".chatlog").append("<div class='user-msg'>" + message + "</div>");
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'chatbot' %}",
+                data: {
+                    'message': message,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    $(".chatlog").append("<div class='bot-msg'>" + response.response + "</div>");
+                }
+            });
+        }
+    </script>
+   </div>
+   
+
+    <script>
+      $(document).ready(function() {
+         $("#chatbot-img").click(function() {
+            $("#chatbot-container").show();
+         });
+   
+         $("#chatbot-container").hide();
+      });
+   </script> -->
+   
+</main>
+</div>
+{%endblock%}
+ 

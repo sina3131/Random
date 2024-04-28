@@ -1,0 +1,11 @@
+<!-- {% extends 'base.html' %} -->
+{% block content %}
+
+{% for s in session %}
+
+    {{s.players}}
+    {{s.location}}
+    {{s}}
+{% endfor %}
+
+{% endblock %}

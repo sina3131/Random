@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex-1 flex justify-center items-center py-20 bg-gray-300">
+    <div class="flex flex-col items-center justify-center">
+        <div class="bg-white p-10 rounded-xl shadow-lg">
+            <h3 class="text-3xl m-1 font-semibold">Register</h3>
+            <form class="flex justify-center items-center flex-col" method="POST" action="">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="group p-2 rounded-xl hover:bg-gray-300">
+                    <p class="font-semibold">{{ field.label }}:</p>
+                    <p class="border-solid border-2 rounded border-black">{{ field }}</p>
+                </div>
+                {% endfor %}
+                <input class="bg-gray-200 hover:bg-gray-600 hover:text-white rounded-xl w-fit px-4 py-2 mt-1 font-bold" type="submit" name="Create User">
+            </form>
+            <div class="flex flex-col justify-center items-center">
+                {% for error in errors %}
+                <p class="text-white bg-red-700 rounded-md m-1 px-1 font-semibold">{{error}}</p>
+                {% endfor %}
+            </div>
+            <p class="p-2">Already have an account? <a class="hover:underline underline-offset-8 transition-all duration-1000" href="{% url 'login' %}">Log In</a></p>
+        </div>
+    </div>
+</div>
+{%endblock%}

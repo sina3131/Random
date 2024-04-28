@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="div" class="text-red-800">Halllâ</div>
+    <button id="button">Now</button>
+    <script>let div = document.getElementById("div") 
+        let oneButton = document.getElementById("button") 
+        
+        document.getElementById("div").innerText = "EEEEE"
+        
+        oneButton.addEventListener("click", displayPlayerForm)
+        
+        function displayPlayerForm() {
+            console.log("JJJAAAAAAAAA")
+            div.classList = 'text-black'
+        }</script>
+</body>
+</html>

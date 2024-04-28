@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex-1 flex justify-center items-center py-20 bg-gray-300">
+    <div class="flex flex-col items-center justify-center">
+        <div class="bg-black p-10 rounded-xl shadow-lg">
+            <h3 class="text-3xl m-1 font-semibold">Register</h3>
+              <form method="POST">
+                {% csrf_token %}
+                <div class="grid grid-cols-2 gap-4">
+                    <label for="{{ form.name.id_for_label }}" class="text-white">Name:</label>
+                    {{ form_prov.name }}
+                    <label for="{{ form.email.id_for_label }}" class="text-white ">Age:</label>
+                    {{ form_prov.age}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Phone-number:</label>
+                    {{ form_prov.phone}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Parents_mobile:</label>
+                    {{ form_prov.parents_phone}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Current_team:</label>
+                    {{ form_prov.current_team}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Location:</label>
+                    {{ form_prov.location}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Day:</label>
+                    {{ form_prov.day}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Time:</label>
+                    {{ form_prov.time}}
+                    <label for="{{ form.phone.id_for_label }}" class="text-white">Message:</label>
+                    {{ form_prov.message}}
+                </div>
+                <button type="submit" class="bg-purple-900 hover:bg-blue-700 text-white font-bold py-2 mt-5 px-4 rounded">Submit</button>
+            </form>
+
+            <div class="flex flex-col justify-center items-center">
+                {% for error in errors %}
+                <p class="text-white bg-red-700 rounded-md m-1 px-1 font-semibold">{{error}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}
+

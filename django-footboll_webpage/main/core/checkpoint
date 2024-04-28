@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/sina/Python/Django/web-framework-project_v1-paul-sina-hyomi/django-boilerplate-main/boilerplate/core/model.tflearn"
+all_model_checkpoint_paths: "/Users/sina/Python/Django/web-framework-project_v1-paul-sina-hyomi/django-boilerplate-main/boilerplate/core/model.tflearn"

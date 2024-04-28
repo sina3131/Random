@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="delete-div" class="hidden">
+    <div class="bg-black fixed inset-0 opacity-50"></div>
+    <div class="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+        <div class="absolute w-1/4 h-fit bg-gray-200 rounded-lg shadow-lg p-6 opacity-100">
+            <h1 class="text-3xl font-bold">Delete Coach</h1>
+            <p class="m-3 text-xl">Are you sure you want to delete:</p>
+            <div class="flex justify-center m-5">
+                <p id="delete-p" class="text-2xl font-semibold">Not defined</p>
+            </div>
+            <div class="flex justify-center">
+                <span id="cancel-delete" class="text-white bg-gray-700 p-2 rounded-md m-1 px-3 font-semibold border-solid border-2 hover:cursor-pointer hover:border-gray-700 hover:bg-white hover:text-gray-700">
+                    Cancel
+                </span>
+                <p id="delete-final" class="text-white p-2 bg-red-700 rounded-md m-1 px-3 border-solid border-2 font-semibold hover:border-red-700 hover:bg-white hover:text-red-700 hover:cursor-pointer">
+                    Delete
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex-1 flex justify-center items-center py-20 bg-gray-300">
+    <div  class="pt-20 flex bg-gray-300 flex-col items-center justify-center">
+        <div class="bg-white p-10 rounded-xl shadow-lg w-full"> 
+            <p class="text-3xl m-1 font-semibold">Coaches</p>
+            <div class="bg-white p-10 rounded-xl shadow-lg mt-4 w-fit">
+                <p class="text-2xl m-1 font-semibold">Add coach</p>
+                <form id="form" class="flex justify-center items-center" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="flex justify-center items-center p-2 rounded-xl hover:bg-gray-300">
+                        <p class="text-xl font-semibold mr-2">New coach:</p>
+                        <input class="border-solid border-2 bg-white border-black rounded" type="text" name="email" placeholder="Enter a coach email" required>
+                    </div>
+                    <input class="bg-gray-200 hover:bg-gray-600 hover:text-white rounded-xl w-fit px-4 py-2 mt-1 font-bold hover:cursor-pointer" type="submit" name="Add Coach" value="Add">
+                </form>      
+            </div>
+            <div id="coach-holder" class="flex flex-wrap justify-center items-center m-4">
+                {% for coach in coaches %}
+                <div class="bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500 delete-coach"
+                id="{{ coach.id }}" coach-name="{{ coach.customer.first_name }} {{ coach.customer.last_name }}"
+                coach-certified="{{ coach.certified }}">
+                    <div class="w-32 h-32 mr-auto ml-auto mb-6 aspect-w-1 border-solid border-4 border-gray-400 rounded-full aspect-h-1 overflow-hidden">
+                        <img class="object-cover w-full h-full" src="/media/{{ coach.customer.img_profil }}" alt="Image" enctype="multipart/form-data">
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">First name: </p>
+                        <p class="font-semibold pl-6">{{coach.customer.first_name}}</p>
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">Last name:  </p>
+                        <p class="font-semibold pl-6">{{coach.customer.last_name}}</p>
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">Email:  </p>
+                        <p class="font-semibold pl-6">{{ coach.customer.email }}</p>
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">Is certified:  </p>
+                        <p id="certified-{{ coach.id }}" class="font-semibold pl-6">{{ coach.certified }}</p>
+                    </div>
+                    <div class="flex justify-evenly items-center">
+                        <p id="update-{{ coach.id }}" class="text-white p-2 m-2 bg-gray-700 rounded-md px-3 border-solid border-2 font-semibold hover:border-gray-700 hover:bg-white hover:text-gray-700 hover:cursor-pointer">
+                            Update Coach
+                        </p>
+                        <p id="delete-{{ coach.id }}" class="text-white p-2 m-2 bg-red-700 rounded-md px-3 border-solid border-2 font-semibold hover:border-red-700 hover:bg-white hover:text-red-700 hover:cursor-pointer">
+                            Delete Coach
+                        </p>
+                    </div>
+                </div>
+                <div id="update-form-{{ coach.id }}" class="hidden bg-white m-10 p-10 rounded-xl shadow-lg shadow-gray-500">
+                    <div class="flex justify-end items-center h-min">
+                        <div id="close-update-{{ coach.id }}" class="bg-gray-400 px-3 h-2 rounded hover:cursor-pointer"></div>
+                    </div>
+                    <div class="w-32 h-32 mr-auto ml-auto mb-6 aspect-w-1 border-solid border-4 border-gray-400 rounded-full aspect-h-1 overflow-hidden">
+                        <img class="object-cover w-full h-full" src="/media/{{ coach.customer.img_profil }}" alt="Image" enctype="multipart/form-data">
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">First name: </p>
+                        <p class="font-semibold pl-6">{{coach.customer.first_name}}</p>
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">Last name:  </p>
+                        <p class="font-semibold pl-6">{{coach.customer.last_name}}</p>
+                    </div>
+                    <div class="p-2 rounded-xl flex justify-between">
+                        <p class="font-semibold">Email:  </p>
+                        <p class="font-semibold pl-6">{{ coach.customer.email }}</p>
+                    </div>
+                    <form id="update-form-{{ coach.id }}" class="m-1 ml-2 rounded-xl flex flex-col justify-center items-center" method="POST" action="" enctype="multipart/form-data" name="update_coach">
+                        {% csrf_token %}
+                        <div class="flex justify-between items-center p-2 w-full hover:bg-gray-500 hover:text-white rounded-xl">
+                            <p class="font-semibold">Is certified:  </p>
+                            <input type="checkbox" id="bool-{{ coach.id }}" name="is_certified">
+                        </div>
+                        <input class="bg-gray-200 mx-16 hover:bg-gray-600 hover:cursor-pointer hover:text-white rounded-xl w-fit px-4 py-2 font-bold" type="submit" value="Uppdate Coach">
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const deleteParagraph = document.getElementById('delete-p');
+    const deleteDiv = document.getElementById('delete-div');
+    const deleteFinalBtn = document.getElementById('delete-final');
+    const cancelDelete = document.getElementById('cancel-delete');
+    const form = document.getElementById('form');
+    const coachHolder = document.getElementById('coach-holder');
+
+    form.addEventListener('submit', submitHandler);
+
+    function submitHandler(event) {
+        event.preventDefault();
+        $.ajax({
+            type:'POST',
+            url: "{% url 'coach' %}",
+            data: $("#form").serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 1) {
+                    coachHolder.innerHTML += response.html;
+                    buttonsSet();
+                }
+                else {
+                    alert(response.msg)
+                }
+            }
+        })};
+    cancelDelete.addEventListener('click', function() { toggleHidden(deleteDiv); });
+    deleteFinalBtn.addEventListener('click', function() {
+        $.ajax({
+            type: 'GET',
+            url: this.getAttribute('link'),
+            dataType: 'json',
+            success: function (response) {
+                if (response.status === 1) {
+                    const deleting = document.getElementById(response.id);
+                    deleting.remove();
+                    toggleHidden(deleteDiv);
+                }
+                else {
+                    toggleHidden(deleteDiv);
+                    alert(response.msg);
+                }
+            }
+            })
+    });
+
+    buttonsSet()
+
+    function toggleHidden(element) {
+        element.classList.toggle('hidden')
+    };
+    function addText(text, id) {
+        deleteParagraph.textContent = text;
+    };   
+    function buttonsSet() {
+        const deleteDivs = document.querySelectorAll('.delete-coach');
+        deleteDivs.forEach((div) => {
+            const coachId = div.getAttribute('id');
+            const coachName = div.getAttribute('coach-name');
+            let coachCertified = div.getAttribute('coach-certified');
+            const deleteBtn = document.querySelector(`#delete-${coachId}`);
+            const updateBtn = document.querySelector(`#update-${coachId}`);
+            const updateForm = document.querySelector(`#update-form-${coachId}`);
+            let boolEl = document.querySelector(`#bool-${coachId}`);
+            const closeUpdate = document.querySelector(`#close-update-${coachId}`);
+            const form2 = document.querySelector(`#update-form-${coachId}`);
+
+            form2.addEventListener('submit', function(event) {
+            event.preventDefault(),
+            $.ajax({
+                type: 'POST',
+                url:`/update_coach/${coachId}/`,
+                data: {
+                    certified:boolEl.checked,
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                dataType: 'json',
+                success: function (response) {
+                if (response.status === 1) {
+                    coachCertified = response.certified;
+                    document.getElementById(`certified-${coachId}`).textContent = response.certified
+                    toggleHidden(updateForm);
+                    toggleHidden(div);
+                }}})});
+
+            closeUpdate.addEventListener('click', function() {
+                toggleHidden(updateForm);
+                toggleHidden(div);
+            });
+
+            updateBtn.addEventListener('click', function() {
+                if (coachCertified === "False") {
+                    boolEl.checked = false
+                }
+                else {
+                    boolEl.checked = true
+                }
+                toggleHidden(updateForm);
+                toggleHidden(div);
+            });
+
+            deleteBtn.addEventListener('click', function() {
+                addText(coachName, coachId);
+                toggleHidden(deleteDiv);
+                deleteFinalBtn.setAttribute('link',`/delete_coach/${coachId}/`)
+            })
+        })};
+</script>
+{% endblock %}
